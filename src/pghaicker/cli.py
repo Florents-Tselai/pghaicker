@@ -44,4 +44,4 @@ def summarize(thread_id):
         contents=gemini_input
     )
 
-    print(summary_response.text)
+    print(summary_response.text, file=sys.stdout)
