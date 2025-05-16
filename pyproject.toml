@@ -8,7 +8,8 @@ dependencies = [
     "llm",
     "google-genai",
     "sqlite-utils",
-    "pandoc"
+    "pandoc",
+    "pypandoc"
 ]
 
 [project.optional-dependencies]
