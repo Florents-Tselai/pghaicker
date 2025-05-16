@@ -1,0 +1,29 @@
+[project]
+name = "pghaicker"
+dynamic = ["version"]
+description = "pghaicker"
+authors = [{ name = "Florents Tselai", email = "florents.tselai@gmail.com" }]
+license = "MIT"
+dependencies = [
+    "llm",
+    "google-genai",
+    "sqlite-utils",
+    "pandoc"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "pghaicker.__version__"}
+
+[project.scripts]
+pghaicker = "pghaicker.cli:cli"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
