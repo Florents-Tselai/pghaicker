@@ -1,7 +1,7 @@
+# pghaicker: AI Assitant for Postgres Hackers
+
 [![Github](https://img.shields.io/static/v1?label=GitHub&message=Repo&logo=GitHub&color=green)](https://github.com/Florents-Tselai/pghaicker)
 [![PyPI](https://img.shields.io/pypi/v/pghaicker.svg)](https://pypi.org/project/pghaicker/)
-
-# pghaicker: AI Assitant for Postgres Hackers
 
 ## Installation
 ```
