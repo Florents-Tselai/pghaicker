@@ -4,9 +4,9 @@ import pypandoc
 import sys
 import re
 from os import environ
-import urllib.request
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+
 
 @click.group()
 def cli():
@@ -37,7 +37,7 @@ def summarize(thread_id, system_prompt, model):
         except ValueError:
             url = f"https://www.postgresql.org/message-id/flat/{thread_id}"
 
-    req = urllib.request.Request(
+    req = Request(
         url,
         headers={
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
@@ -45,13 +45,13 @@ def summarize(thread_id, system_prompt, model):
     )
 
     try:
-        with urllib.request.urlopen(req) as response:
+        with urlopen(req) as response:
             if response.status != 200:
                 raise RuntimeError(f"Failed to fetch thread. Status code: {response.status}")
             html_content = response.read().decode("utf-8")
-    except urllib.error.HTTPError as e:
+    except HTTPError as e:
         raise RuntimeError(f"HTTP error occurred: {e.code} {e.reason}")
-    except urllib.error.URLError as e:
+    except URLError as e:
         raise RuntimeError(f"URL error occurred: {e.reason}")
 
     # Step 2: Convert HTML to Markdown using pypandoc
