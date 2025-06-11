@@ -1,13 +1,14 @@
 [project]
 name = "pghaicker"
 dynamic = ["version"]
-description = "pghaicker"
+description = "AI Assistant for Postgres Hackers"
 authors = [{ name = "Florents Tselai", email = "florents.tselai@gmail.com" }]
 license = "MIT"
 dependencies = [
     "google-genai",
     "pypandoc"
 ]
+requires-python = ">=3.11"
 
 [project.optional-dependencies]
 dev = [
@@ -21,7 +22,12 @@ version = {attr = "pghaicker.__version__"}
 [project.scripts]
 pghaicker = "pghaicker.cli:cli"
 
+[project.urls]
+Homepage = "https://github.com/Florents-Tselai/pghaicker"
+Repository = "https://github.com/Florents-Tselai/pghaicker"
+Issues = "https://github.com/Florents-Tselai/pghaicker/issues"
+Changelog = "https://github.com/Florents-Tselai/pghaicker/releases"
+
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
-

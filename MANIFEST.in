@@ -1,0 +1,5 @@
+exclude tests/*
+exclude threads/*
+exclude docs/*
+exclude *.pyc
+exclude __pycache__/*
