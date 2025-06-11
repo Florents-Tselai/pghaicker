@@ -1,14 +1,10 @@
-from os import environ
-import sys
-
-import click
 from google import genai
 import click
 import pypandoc
 import sys
-import urllib3
 import re
 from os import environ
+import urllib.request
 
 
 @click.group()
@@ -40,15 +36,22 @@ def summarize(thread_id, system_prompt, model):
         except ValueError:
             url = f"https://www.postgresql.org/message-id/flat/{thread_id}"
 
-    http = urllib3.PoolManager(headers={
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-    })
-    response = http.request("GET", url)
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        }
+    )
 
-    if response.status != 200:
-        raise RuntimeError(f"Failed to fetch thread. Status code: {response.status}")
-
-    html_content = response.data.decode("utf-8")
+    try:
+        with urllib.request.urlopen(req) as response:
+            if response.status != 200:
+                raise RuntimeError(f"Failed to fetch thread. Status code: {response.status}")
+            html_content = response.read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"HTTP error occurred: {e.code} {e.reason}")
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"URL error occurred: {e.reason}")
 
     # Step 2: Convert HTML to Markdown using pypandoc
     markdown = pypandoc.convert_text(html_content, 'md', format='html')

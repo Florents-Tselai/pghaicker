@@ -5,10 +5,7 @@ description = "pghaicker"
 authors = [{ name = "Florents Tselai", email = "florents.tselai@gmail.com" }]
 license = "MIT"
 dependencies = [
-    "llm",
     "google-genai",
-    "sqlite-utils",
-    "pandoc",
     "pypandoc"
 ]
 
