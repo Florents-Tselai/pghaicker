@@ -3,17 +3,15 @@
 
 # pghaicker: AI Assitant for Postgres Hackers
 
-Start by getting a `GOOGLE_API_KEY` https://aistudio.google.com/app/apikey
-
+## Installation
 ```
- brew install pandoc
- #or 
- apt-get install pandoc
- 
- pip install pghaicker
- 
- export GOOGLE_API_KEY="xxx"
+brew install pandoc # or apt-get install pandoc
+ ```
 ```
+pip install pghaicker
+export GOOGLE_API_KEY="xxx" # see https://aistudio.google.com/app/apikey
+```
+## Usage
 
 ```
 Usage: pghaicker summarize [OPTIONS] THREAD_ID
@@ -25,6 +23,9 @@ Options:
   -m, --model TEXT          default: gemini-2.0-flash  [required]
   --help                    Show this message and exit.
 ```
+
+## `pghaicker summarize <thread-id>`
+
 
 ### Examples
 
@@ -147,3 +148,4 @@ The thread discusses a proposal by Junwang Zhao to introduce randomness into the
 *   **Address Concerns:** Provide a compelling argument and data showing that the benefits of adding randomness outweigh the concerns. Perhaps focus on scenarios where it provides a clear advantage without significant drawbacks.
 *   **Test Patches:** Implement and thoroughly test any proposed changes in a test environment.
 </details>
+
