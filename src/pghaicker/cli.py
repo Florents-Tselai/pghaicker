@@ -7,8 +7,8 @@ import click
 import pypandoc
 import sys
 import urllib3
-
-client = genai.Client()
+import re
+from os import environ
 
 
 @click.group()
@@ -19,20 +19,26 @@ def cli():
 
 @cli.command()
 @click.argument("thread_id", nargs=1)
-@click.argument("system_prompt", required=False,
-                default=f"Summarize the following thread."
-                        f"Be explicit about potential decision points and blockers."
-                        f"If there's a decision to be made, say so.")
-def summarize(thread_id, system_prompt):
+@click.option("-s", "--system_prompt", required=False,
+              default=f"Summarize the following thread."
+                      f"Be explicit about potential decision points and blockers."
+                      f"If there's a decision to be made, say so.")
+@click.option("-m", "--model", required=True, default='gemini-2.0-flash', help="default: gemini-2.0-flash")
+def summarize(thread_id, system_prompt, model):
     """Download thread HTML, convert to Markdown, and summarize with Gemini."""
 
-    try:
-        # if passed int it's from the PgPro archives
-        int(thread_id)
-        # Step 1: Fetch HTML using urllib3 with a browser-like User-Agent
-        url = f"https://postgrespro.com/list/thread-id/{thread_id}"
-    except ValueError:
-        url = f"https://www.postgresql.org/message-id/flat/{thread_id}"
+    # Check if input is a URL
+    if re.match(r"^https?://", thread_id):
+        url = thread_id
+
+    else:
+        try:
+            # if passed int it's from the PgPro archives
+            int(thread_id)
+            # Step 1: Fetch HTML using urllib3 with a browser-like User-Agent
+            url = f"https://postgrespro.com/list/thread-id/{thread_id}"
+        except ValueError:
+            url = f"https://www.postgresql.org/message-id/flat/{thread_id}"
 
     http = urllib3.PoolManager(headers={
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
@@ -50,8 +56,12 @@ def summarize(thread_id, system_prompt):
     # Step 3: Send Markdown to Gemini for summarization
     gemini_input = f"{system_prompt}\n\n{markdown}"
 
+    client = genai.Client(
+        api_key=environ.get('GOOGLE_API_KEY') or environ.get('GEMINI_API_KEY')
+    )
+
     summary_response = client.models.generate_content(
-        model='gemini-2.0-flash',
+        model=model,
         contents=gemini_input
     )
 
